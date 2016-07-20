@@ -4,7 +4,7 @@
 ## Установка
 
 ```sh
-npm install --registry=http://npm.yandex-team.ru deps-formatter
+npm install --save-dev deps-formatter
 ```
 
 ## Подготовка
