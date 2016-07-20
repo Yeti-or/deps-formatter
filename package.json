@@ -1,0 +1,23 @@
+{
+  "name": "deps-formatter",
+  "version": "0.1.1",
+  "description": "deps auto formatting",
+  "main": "index.js",
+  "bin": {
+    "deps-formatter": "bin/deps-formatter.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bb8": "0.0.2",
+    "bem-config": "^2.0.1",
+    "bem-walk": "^1.0.0-1",
+    "gulp-cst": "^1.0.0",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1",
+    "vinyl-fs": "^2.4.3"
+  }
+}
