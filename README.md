@@ -10,7 +10,7 @@ npm install --save-dev deps-formatter
 ## Подготовка
 
 Добавьте в ваш проект файл `.bemrc` с информацией о уровнях ваших блоков.
-Например для библиотеки [islands](https://github.yandex-team.ru/lego/islands)
+Например:
 
 ```sh
 $ cat .bemrc
@@ -18,11 +18,7 @@ $ cat .bemrc
     root: true,
     levels: {
          "common.blocks"      : {},
-         "desktop.blocks"     : {},
-         "touch.blocks"       : {},
-         "touch-pad.blocks"   : {},
-         "touch-phone.blocks" : {},
-         "examples.blocks"    : {}
+         "desktop.blocks"     : {}
     }
 }
 ```
