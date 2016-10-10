@@ -6,11 +6,10 @@ var bb8 = require('bb8');
 var gCST = require('gulp-cst');
 var through = require('through2');
 var vfs = require('vinyl-fs');
+var Vinyl = require('vinyl');
 
 var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
-// var removeBEMHTML = require('./lib/removeBEMHTML.js');
 var arrayMe = require('./lib/arrayMe.js');
-
 
 /*
     BEMEntity {
@@ -30,24 +29,59 @@ function filterDEPS() {
     });
 }
 
-function updateMeBaby() {
-
-var conf = bemConfig.levelMapSync();
-var levels = Object.keys(conf);
-if (!levels.length) {
-	console.error('No levels! Add .bemrc with levels');
-} else {
-	console.log(levels);
+/**
+ * @params {Array} files
+ * @returns {Stream}
+ */
+function createReadableStream(files) {
+    var stream = through.obj();
+    files.forEach(file => stream.push(
+        new Vinyl({
+            path: file,
+            contents: fs.readFileSync(file)
+        })
+    ));
+    return stream;
 }
 
-bemWalk(levels)
-.pipe(bb8({
-    'examples': '*blocks',
-    'tests': '*blocks',
-    'tmpl-specs': '*blocks'
-}))
-.pipe(filterDEPS())
-.pipe(bemEntityToVinyl())
+/**
+ * @returns {Stream}
+ */
+function createBemWalkStream() {
+    var conf = bemConfig.levelMapSync();
+    var levels = Object.keys(conf);
+    if (!levels.length) {
+        console.warn('No levels! Add .bemrc with levels');
+        console.warn('Try to use default levels : common.blocks, ...');
+        levels = [
+            'common.blocks',
+            'desktop.blocks',
+            'deskpad.blocks',
+            'touch.blocks',
+            'touch-phone.blocks',
+            'touch-pad.blocks'
+        ];
+    } else {
+        console.log(levels);
+    }
+
+    return bemWalk(levels)
+        .pipe(bb8({
+            'examples': '*blocks',
+            'tests': '*blocks',
+            'tmpl-specs': '*blocks'
+        }))
+        .pipe(filterDEPS())
+        .pipe(bemEntityToVinyl());
+}
+
+
+module.exports = fileNames =>
+(
+    fileNames ?
+    createReadableStream(fileNames) :
+    createBemWalkStream()
+)
 .pipe(gCST())
 .pipe(arrayMe())
 .pipe(through.obj((entity, _, next) => {
@@ -55,7 +89,3 @@ bemWalk(levels)
     next(null, entity);
 }))
 .pipe(vfs.dest('./'))
-
-}
-
-module.exports = updateMeBaby;

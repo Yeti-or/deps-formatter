@@ -1,10 +1,10 @@
 {
   "name": "deps-formatter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "deps auto formatting",
   "main": "index.js",
   "bin": {
-    "deps-formatter": "bin/deps-formatter.js"
+    "deps-formatter": "bin/deps-formatter"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +15,7 @@
     "bb8": "0.0.2",
     "bem-config": "^2.0.1",
     "bem-walk": "^1.0.0-1",
+    "coa": "^1.0.1",
     "cst": "^0.3.0",
     "gulp-cst": "^1.0.0",
     "through2": "^2.0.1",
