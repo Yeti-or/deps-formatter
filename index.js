@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 var bemConfig = require('bem-config')();
+var betterc = require('betterc');
 var bemWalk = require('bem-walk');
 var bb8 = require('bb8');
 var gCST = require('gulp-cst');
@@ -10,6 +11,7 @@ var Vinyl = require('vinyl');
 
 var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
 var arrayMe = require('./lib/arrayMe.js');
+var formatRule = require('./lib/rules/format.js');
 
 /*
     BEMEntity {
@@ -61,9 +63,10 @@ function createBemWalkStream() {
             'touch-phone.blocks',
             'touch-pad.blocks'
         ];
-    } else {
-        console.log(levels);
     }
+
+    console.log('Levels to find deps: ');
+    console.log(levels);
 
     return bemWalk(levels)
         .pipe(bb8({
@@ -75,6 +78,11 @@ function createBemWalkStream() {
         .pipe(bemEntityToVinyl());
 }
 
+var config = betterc.sync({ name: 'deps-formatter' , defaults: {
+    format: 'commonjs'
+}});
+
+config = Object.assign.apply(null, config);
 
 module.exports = fileNames =>
 (
@@ -83,9 +91,10 @@ module.exports = fileNames =>
     createBemWalkStream()
 )
 .pipe(gCST())
-.pipe(arrayMe())
+.pipe(formatRule(config.format.toLowerCase()))
+//.pipe(arrayMe())
 .pipe(through.obj((entity, _, next) => {
-    console.log(entity.path);
+   // console.log(entity.path);
     next(null, entity);
 }))
 .pipe(vfs.dest('./'))

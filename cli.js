@@ -14,7 +14,7 @@ module.exports = coa.Cmd()
         .short('V').long('version')
         .only()
         .flag()
-        .act(() => {
+        .act(function() {
             // output the version to stdout instead of stderr if returned
             process.stdout.write(pkg.version + '\n');
             // coa will run `.toString` on the returned value and send it to stderr
@@ -26,4 +26,6 @@ module.exports = coa.Cmd()
         .arr()
         .name('targets')
         .end()
-    .act((opts, args) => formatter(args.targets));
+    .act(function(opts, args) {
+        formatter(args.targets);
+    });
