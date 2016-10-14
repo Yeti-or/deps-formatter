@@ -1,6 +1,7 @@
 # DEPS-FORMATTER
 
 Приведение `deps.js` файлов к единообразному виду.
+
 ## Установка
 
 ```sh
@@ -31,3 +32,31 @@ $ cat .bemrc
 ```sh
 deps-formatter
 ```
+или
+
+```sh
+deps-formatter path/to/file.deps.js
+```
+
+All rules for formatting are described in .deps-formatterrc config file
+.deps-formatterrc is plain JSON.
+
+```sh
+cat .deps-formatterrc
+{
+    "format": "arrayexpression"
+}
+```
+
+## Rules:
+
+### Format
+
+Response for root format of deps.js file, could be different for one and many depObjects.
+
+Values:
+
+* "expression" [default] - `({...})` or `[{...}, {...}]`
+* "arrayExpression" - `[{...}]` or `[{...}, {...}]`
+* "objectExpression" - `({...})` or `([{...}, {...}])`
+* "commonJS" - `module.exports = {...}` or `module.exports = [...]`
