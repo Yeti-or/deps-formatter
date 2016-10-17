@@ -12,6 +12,7 @@ var Vinyl = require('vinyl');
 var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
 var arrayMe = require('./lib/arrayMe.js');
 var formatRule = require('./lib/rules/format.js');
+var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 
 /*
     BEMEntity {
@@ -79,7 +80,8 @@ function createBemWalkStream() {
 }
 
 var config = betterc.sync({ name: 'deps-formatter' , defaults: {
-    format: 'commonjs'
+    format: 'commonjs',
+    depsObjIsArray: false
 }});
 
 config = Object.assign.apply(null, config);
@@ -91,7 +93,10 @@ module.exports = fileNames =>
     createBemWalkStream()
 )
 .pipe(gCST())
-.pipe(formatRule(config.format.toLowerCase()))
+.pipe(formatRule(config['format'].toLowerCase()))
+.pipe(depsObjIsArray(config['depsObjIsArray']))
+
+
 //.pipe(arrayMe())
 .pipe(through.obj((entity, _, next) => {
    // console.log(entity.path);
