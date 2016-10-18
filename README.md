@@ -60,3 +60,4 @@ Values:
 * "arrayExpression" - `[{...}]` or `[{...}, {...}]`
 * "objectExpression" - `({...})` or `([{...}, {...}])`
 * "commonJS" - `module.exports = {...}` or `module.exports = [...]`
+* "any" - whatever you want format
