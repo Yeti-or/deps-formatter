@@ -61,3 +61,16 @@ Values:
 * "objectExpression" - `({...})` or `([{...}, {...}])`
 * "commonJS" - `module.exports = {...}` or `module.exports = [...]`
 * "any" - whatever you want format
+
+### depsObjIsArray
+
+Response for type of mustDeps/shouldDeps value.
+Works for value that could be recorded as arrays with one value.
+
+Values:
+
+* false [default] - mustDeps: [{...}] -> mustDeps: {...}
+
+* true            - mustDeps: {...} -> mustDeps: [{...}]
+
+* "any" - whatever you want
