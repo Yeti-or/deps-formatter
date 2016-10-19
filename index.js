@@ -13,6 +13,7 @@ var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
 var arrayMe = require('./lib/arrayMe.js');
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
+var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
 
 /*
     BEMEntity {
@@ -81,7 +82,8 @@ function createBemWalkStream() {
 
 var config = betterc.sync({ name: 'deps-formatter' , defaults: {
     format: 'commonjs',
-    depsObjIsArray: false
+    depsObjIsArray: false,
+    blockNameShortcut: false
 }});
 
 config = Object.assign.apply(null, config);
@@ -93,13 +95,14 @@ module.exports = fileNames =>
     createBemWalkStream()
 )
 .pipe(gCST())
+//rules begin
 .pipe(formatRule(config['format'].toLowerCase()))
 .pipe(depsObjIsArray(config['depsObjIsArray']))
-
-
-//.pipe(arrayMe())
+.pipe(blockNameShortcut(config['blockNameShortcut']))
+//rules end
 .pipe(through.obj((entity, _, next) => {
-   // console.log(entity.path);
+//    console.log(entity.path);
+    // TODO: verbose
     next(null, entity);
 }))
 .pipe(vfs.dest('./'))
