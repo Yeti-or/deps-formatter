@@ -81,7 +81,7 @@ module.exports = fileNames =>
 )
 .pipe(gCST())
 //rules begin
-.pipe(formatRule(config['format'].toLowerCase()))
+.pipe(formatRule(config['format']))
 .pipe(depsObjIsArray(config['depsObjIsArray']))
 .pipe(blockNameShortcut(config['blockNameShortcut']))
 //rules end
@@ -90,4 +90,4 @@ module.exports = fileNames =>
     // TODO: verbose
     next(null, entity);
 }))
-.pipe(vfs.dest('./'))
+.pipe(vfs.dest('.'))
