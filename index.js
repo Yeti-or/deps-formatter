@@ -15,6 +15,10 @@ var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
 
+var $ = require('cst-helpers');
+var devnull = require('./lib/devnull');
+var del = require('del');
+
 /*
     BEMEntity {
        entity: { block: "page" },
@@ -58,12 +62,11 @@ function createBemWalkStream() {
         console.warn('No levels! Add .bemrc with levels');
         console.warn('Try to use default levels : common.blocks, ...');
         levels = [
-            'common.blocks',
-            'desktop.blocks',
-            'deskpad.blocks',
-            'touch.blocks',
-            'touch-phone.blocks',
-            'touch-pad.blocks'
+            'blocks-common',
+            'blocks-deskpad',
+            'blocks-desktop',
+            'blocks-touch-phone',
+            'contribs'
         ];
     }
 
@@ -86,6 +89,24 @@ var config = betterc.sync({ name: 'deps-formatter' , defaults: {
     blockNameShortcut: false
 }});
 
+
+function removeEmpty(el) {
+    var next = el.parentElement;
+    if (next.type === 'ArrayExpression') {
+        $.removeElementFromArray(next, el);
+        next.elements.length === 0 && removeEmpty(next);
+    }
+    if (next.type === 'ObjectExpression') {
+        $.removePropertyFromObject(next, el);
+        //$.removePropertyFromObjectByKeyName(next, 'tech');
+        next.properties.length === 0 && removeEmpty(next);
+    }
+    if (next.type === 'ObjectProperty') {
+        removeEmpty(next);
+    }
+}
+
+
 config = Object.assign.apply(null, config);
 
 module.exports = fileNames =>
@@ -96,9 +117,38 @@ module.exports = fileNames =>
 )
 .pipe(gCST())
 //rules begin
-.pipe(formatRule(config['format'].toLowerCase()))
-.pipe(depsObjIsArray(config['depsObjIsArray']))
-.pipe(blockNameShortcut(config['blockNameShortcut']))
+//.pipe(formatRule(config['format'].toLowerCase()))
+//.pipe(depsObjIsArray(config['depsObjIsArray']))
+//.pipe(blockNameShortcut(config['blockNameShortcut']))
+.pipe(through.obj((entity, _, next) => {
+    var tree = entity.tree;
+
+    // ObjectProperty[key="noDeps"]
+    tree.selectNodesByType('ObjectProperty').forEach(el => {
+        if (el.key.name === 'noDeps' || el.key.value === 'noDeps') {
+            var obj = el.parentElement;
+            if (obj) {
+                console.log(entity.path);
+                removeEmpty(el);
+            }
+        }
+    });
+
+    var ee = tree.body[0] && tree.body[0].expression;
+
+
+    if (ee && ee.type === 'ArrayExpression' && ee.elements.length === 0) {
+        // we will remove such deps in build.js
+        entity.contents = new Buffer('');
+    } else if (ee && ee.type === 'ObjectExpression' && ee.properties.length === 0) {
+        // we will remove such deps in build.js
+        entity.contents = new Buffer('');
+    } else {
+      entity.contents = new Buffer(tree.getSourceCode());
+    }
+
+    next(null, entity);
+}))
 //rules end
 .pipe(through.obj((entity, _, next) => {
 //    console.log(entity.path);
@@ -106,3 +156,12 @@ module.exports = fileNames =>
     next(null, entity);
 }))
 .pipe(vfs.dest('./'))
+
+.pipe(through.obj((file, _, next) => {
+    if (!file.contents.length) {
+        del(file.path);
+    }
+    next(null, file);
+}))
+.pipe(devnull);
+
