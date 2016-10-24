@@ -73,4 +73,16 @@ Values:
 
 * true            - mustDeps: {...} -> mustDeps: [{...}]
 
-* "any" - whatever you want
+* "any"           - whatever you want
+
+### blockNameShortcut
+
+Response for allowing {block: 'name'} -> 'name' shortcut
+
+Values:
+
+* false [default] - mustDeps: {block: 'name'} -> mustDeps: 'name'
+
+* true            - mustDeps: 'name' -> mustDeps: {block: 'name'}
+
+* "any"           - whatever you want
