@@ -10,28 +10,10 @@ var vfs = require('vinyl-fs');
 var Vinyl = require('vinyl');
 
 var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
-var arrayMe = require('./lib/arrayMe.js');
+
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
-
-/*
-    BEMEntity {
-       entity: { block: "page" },
-       level: "libs/bem-core/desktop.blocks",
-       tech: "bemhtml",
-       path: "libs/bem-core/desktop.blocks/page/page.bemhtml"
-    }
-*/
-
-function filterDEPS() {
-    return through.obj(function(entity, enc, next) {
-        if (entity.tech === 'deps.js') {
-            this.push(entity);
-		}
-		next();
-    });
-}
 
 /**
  * @params {Array} files
@@ -76,7 +58,10 @@ function createBemWalkStream() {
             'tests': '*blocks',
             'tmpl-specs': '*blocks'
         }))
-        .pipe(filterDEPS())
+        .pipe(through.obj(function(entity, _, next) {
+            // filter deps.js
+            next(null, entity.tech === 'deps.js' ? entity : null);
+        }))
         .pipe(bemEntityToVinyl());
 }
 
@@ -101,7 +86,7 @@ module.exports = fileNames =>
 .pipe(blockNameShortcut(config['blockNameShortcut']))
 //rules end
 .pipe(through.obj((entity, _, next) => {
-//    console.log(entity.path);
+    // console.log(entity.path);
     // TODO: verbose
     next(null, entity);
 }))
