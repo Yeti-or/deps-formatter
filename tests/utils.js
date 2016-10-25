@@ -5,10 +5,10 @@ var cst = require('cst');
 
 var parser = new cst.Parser();
 
-var assertRule = function(rule, opts, from, to) {
+var assertRule = function(rule, opts, from, to, comment) {
     var tree = parser.parse(from);
     rule(tree, opts);
-    expect(tree.getSourceCode()).to.eql(to);
+    expect(tree.getSourceCode(), comment ? comment : null ).to.eql(to);
 };
 
 module.exports = {assertRule: assertRule};

@@ -15,8 +15,8 @@ describe('blockNameShortcut rule', () => {
             mustDeps: 'i-bem'
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile);
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile);
+        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
     });
 
     it('should work woth mustDeps|shouldDeps|noDeps', () => {
@@ -34,8 +34,8 @@ describe('blockNameShortcut rule', () => {
             noDeps: 'i-global'
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile);
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile);
+        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
     });
 
     it('should work with arrays', () => {
@@ -59,26 +59,28 @@ describe('blockNameShortcut rule', () => {
             ]
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile);
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile);
+        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
     });
 
     it('should ignore blocks with elems/mods', () => {
         var depFile =
         `({
             mustDeps: [
-                {block: 'i-ecma', elem: 'array'}
+                {block: 'i-ecma', elem: 'array'},
+                {block: 'i-jquery', mods: {version: 'default'}}
             ]
         });`;
 
         var transformedDepFile =
         `({
             mustDeps: [
-                {block: 'i-ecma', elem: 'array'}
+                {block: 'i-ecma', elem: 'array'},
+                {block: 'i-jquery', mods: {version: 'default'}}
             ]
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile);
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile);
+        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
     });
 });
