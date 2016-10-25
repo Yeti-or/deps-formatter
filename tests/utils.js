@@ -11,4 +11,13 @@ var assertRule = function(rule, from, to, comment) {
     expect(tree.getSourceCode(), comment ? comment : null ).to.eql(to);
 };
 
-module.exports = {assertRule: assertRule};
+var assertRules = function(rules, from, to, comment) {
+    var tree = parser.parse(from);
+    rules.forEach(rule => rule(tree));
+    expect(tree.getSourceCode(), comment ? comment : null ).to.eql(to);
+};
+
+module.exports = {
+    assertRule,
+    assertRules
+};
