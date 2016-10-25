@@ -7,13 +7,14 @@
     "deps-formatter": "bin/deps-formatter"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests"
   },
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
     "bb8": "0.0.2",
     "bem-config": "^2.0.1",
+    "bem-files-to-vinyl-fs": "^1.0.0",
     "bem-walk": "^1.0.0-1",
     "betterc": "^1.1.0",
     "coa": "^1.0.1",

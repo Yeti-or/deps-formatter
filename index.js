@@ -9,9 +9,9 @@ var through = require('through2');
 var vfs = require('vinyl-fs');
 var Vinyl = require('vinyl');
 
-var bemEntityToVinyl = require('./lib/bemEntityToVinyl');
+var bemEntityToVinyl = require('bem-files-to-vinyl-fs');
 
-var formatRule = require('./lib/rules/format.js');
+var formatRule = require('./lib/rules/format.js')
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
 
