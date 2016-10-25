@@ -7,10 +7,14 @@
     "deps-formatter": "bin/deps-formatter"
   },
   "scripts": {
-    "test": "mocha tests"
+    "lint": "jshint . && jscs .",
+    "pretest": "npm run lint",
+    "test": "npm run specs",
+    "specs": "mocha",
+    "cover": "nyc mocha"
   },
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "bb8": "0.0.2",
     "bem-config": "^2.0.1",
@@ -27,6 +31,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.1.2"
+    "jscs": "^3.0.7",
+    "jshint": "^2.9.4",
+    "mocha": "^3.1.2",
+    "nyc": "^8.3.2"
   }
 }

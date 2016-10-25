@@ -203,21 +203,13 @@ describe('format rule', () => {
                 formatRule({format: 'commonJS'}),
                 formatRule({format: 'arrayExpression'}),
                 formatRule({format: 'expression'}),
-                formatRule({format: 'objectExpression'}),
+                formatRule({format: 'objectExpression'})
             ];
             assertRules(rules, depFile, depFile);
         });
 
         it('many', () => {
             var depFile =
-            `([{
-                mustDeps: {block: 'i-bem'}
-            }, {
-                tech: js,
-                mustDeps: {block: 'i-jquery'}
-            }]);`;
-
-            var transformedDepFile =
             `([{
                 mustDeps: {block: 'i-bem'}
             }, {
@@ -249,7 +241,7 @@ describe('format rule', () => {
                 formatRule({format: 'commonJS'}),
                 formatRule({format: 'arrayExpression'}),
                 formatRule({format: 'expression'}),
-                formatRule({format: 'objectExpression'}),
+                formatRule({format: 'objectExpression'})
             ];
             assertRules(rules, depFile, depFile);
         });
