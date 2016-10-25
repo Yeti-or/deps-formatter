@@ -5,9 +5,9 @@ var cst = require('cst');
 
 var parser = new cst.Parser();
 
-var assertRule = function(rule, opts, from, to, comment) {
+var assertRule = function(rule, from, to, comment) {
     var tree = parser.parse(from);
-    rule(tree, opts);
+    rule(tree);
     expect(tree.getSourceCode(), comment ? comment : null ).to.eql(to);
 };
 

@@ -15,8 +15,8 @@ describe('blockNameShortcut rule', () => {
             mustDeps: 'i-bem'
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
+        assertRule(blockNameShortcut({blockNameShortcut: true}), depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut({blockNameShortcut: false}), transformedDepFile, depFile, 'false');
     });
 
     it('should work woth mustDeps|shouldDeps|noDeps', () => {
@@ -34,8 +34,8 @@ describe('blockNameShortcut rule', () => {
             noDeps: 'i-global'
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
+        assertRule(blockNameShortcut({blockNameShortcut: true}), depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut({blockNameShortcut: false}), transformedDepFile, depFile, 'false');
     });
 
     it('should work with arrays', () => {
@@ -59,8 +59,8 @@ describe('blockNameShortcut rule', () => {
             ]
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
+        assertRule(blockNameShortcut({blockNameShortcut: true}), depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut({blockNameShortcut: false}), transformedDepFile, depFile, 'false');
     });
 
     it('should ignore blocks with elems/mods', () => {
@@ -80,7 +80,7 @@ describe('blockNameShortcut rule', () => {
             ]
         });`;
 
-        assertRule(blockNameShortcut, {blockNameShortcut: true}, depFile, transformedDepFile, 'true');
-        assertRule(blockNameShortcut, {blockNameShortcut: false}, transformedDepFile, depFile, 'false');
+        assertRule(blockNameShortcut({blockNameShortcut: true}), depFile, transformedDepFile, 'true');
+        assertRule(blockNameShortcut({blockNameShortcut: false}), transformedDepFile, depFile, 'false');
     });
 });
