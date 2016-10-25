@@ -23,7 +23,7 @@
     "betterc": "^1.1.0",
     "coa": "^1.0.1",
     "cst": "^0.3.0",
-    "cst-helpers": "0.0.6",
+    "cst-helpers": "0.1.0",
     "gulp-cst": "^1.0.0",
     "through2": "^2.0.1",
     "vinyl": "^1.1.1",
