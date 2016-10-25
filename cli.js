@@ -4,7 +4,6 @@ var pkg = require('./package.json');
 
 var formatter = require('.');
 
-
 module.exports = coa.Cmd()
     .helpful()
     .name(pkg.name)

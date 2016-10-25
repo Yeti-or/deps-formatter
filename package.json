@@ -7,21 +7,33 @@
     "deps-formatter": "bin/deps-formatter"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "jshint . && jscs .",
+    "pretest": "npm run lint",
+    "test": "npm run specs",
+    "specs": "mocha",
+    "cover": "nyc mocha"
   },
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "bb8": "0.0.2",
     "bem-config": "^2.0.1",
+    "bem-files-to-vinyl-fs": "^1.0.0",
     "bem-walk": "^1.0.0-1",
     "betterc": "^1.1.0",
     "coa": "^1.0.1",
     "cst": "^0.3.0",
-    "cst-helpers": "0.0.6",
+    "cst-helpers": "0.1.0",
     "gulp-cst": "^1.0.0",
     "through2": "^2.0.1",
     "vinyl": "^1.1.1",
     "vinyl-fs": "^2.4.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jscs": "^3.0.7",
+    "jshint": "^2.9.4",
+    "mocha": "^3.1.2",
+    "nyc": "^8.3.2"
   }
 }

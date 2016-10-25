@@ -1,5 +1,10 @@
 # DEPS-FORMATTER
 
+[![NPM version](http://img.shields.io/npm/v/deps-formatter.svg?style=flat)](http://www.npmjs.org/package/deps-formatter)
+[![Build Status](http://img.shields.io/travis/yeti-or/deps-formatter/master.svg?style=flat&label=tests)](https://travis-ci.org/yeti-or/deps-formatter)
+[![Coverage Status](https://img.shields.io/coveralls/yeti-or/deps-formatter.svg?branch=master&style=flat)](https://coveralls.io/r/yeti-or/deps-formatter)
+[![Dependency Status](http://img.shields.io/david/yeti-or/deps-formatter.svg?style=flat)](https://david-dm.org/yeti-or/deps-formatter)
+
 Приведение `deps.js` файлов к единообразному виду.
 
 ## Установка
