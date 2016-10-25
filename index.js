@@ -125,27 +125,13 @@ module.exports = fileNames =>
 
     // ObjectProperty[key="noDeps"]
     tree.selectNodesByType('ObjectProperty').forEach(el => {
-        if (el.key.name === 'noDeps' || el.key.value === 'noDeps') {
-            var obj = el.parentElement;
-            if (obj) {
+        if (el.key.name === 'block'){
+            if (el.value.value === 'button') {
                 console.log(entity.path);
-                removeEmpty(el);
             }
         }
     });
 
-    var ee = tree.body[0] && tree.body[0].expression;
-
-
-    if (ee && ee.type === 'ArrayExpression' && ee.elements.length === 0) {
-        // we will remove such deps in build.js
-        entity.contents = new Buffer('');
-    } else if (ee && ee.type === 'ObjectExpression' && ee.properties.length === 0) {
-        // we will remove such deps in build.js
-        entity.contents = new Buffer('');
-    } else {
-      entity.contents = new Buffer(tree.getSourceCode());
-    }
 
     next(null, entity);
 }))
