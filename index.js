@@ -36,6 +36,10 @@ function createReadableStream(files) {
 function createBemWalkStream() {
     var conf = bemConfig.levelMapSync();
     var levels = Object.keys(conf);
+    if (config['levels']) {
+        // get levels from .deps-formaterrc
+        levels = Object.keys(config['levels']);
+    }
     if (!levels.length) {
         console.warn('No levels! Add .bemrc with levels');
         console.warn('Try to use default levels : common.blocks, ...');
@@ -52,26 +56,33 @@ function createBemWalkStream() {
     console.log('Levels to find deps: ');
     console.log(levels);
 
+    var subLevelsMasks = config['subLevelsMasks'];
+    if (subLevelsMasks) {
+        console.log('And subLevels masks: ');
+        Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
+    }
+
     return bemWalk(levels)
-        .pipe(bb8({
-            'examples': '*blocks',
-            'tests': '*blocks',
-            'tmpl-specs': '*blocks'
-        }))
+        // extend bem-walker
+        .pipe(subLevelsMasks ? bb8(subLevelsMasks) : through.obj())
+        // filter deps.js
         .pipe(through.obj(function(entity, _, next) {
-            // filter deps.js
             next(null, entity.tech === 'deps.js' ? entity : null);
         }))
         .pipe(bemEntityToVinyl());
 }
 
 var config = betterc.sync({name: 'deps-formatter', defaults: {
-    format: 'commonjs',
-    depsObjIsArray: false,
-    blockNameShortcut: false
+    rules: {
+        format: null,
+        depsObjIsArray: null,
+        blockNameShortcut: null
+    }
 }});
 
 config = Object.assign.apply(null, config);
+
+var rules = config['rules'];
 
 module.exports = fileNames =>
 (
@@ -81,9 +92,9 @@ module.exports = fileNames =>
 )
 .pipe(gCST())
 // rules begin
-.pipe(formatRule(config['format']))
-.pipe(depsObjIsArray(config['depsObjIsArray']))
-.pipe(blockNameShortcut(config['blockNameShortcut']))
+.pipe(formatRule(rules['format']))
+.pipe(depsObjIsArray(rules['depsObjIsArray']))
+.pipe(blockNameShortcut(rules['blockNameShortcut']))
 // rules end
 .pipe(through.obj((entity, _, next) => {
     // console.log(entity.path);
