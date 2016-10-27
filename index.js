@@ -14,6 +14,39 @@ var bemEntityToVinyl = require('bem-files-to-vinyl-fs');
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
+var elemsIsArray = require('./lib/rules/elemsIsArray.js');
+
+var config = betterc.sync({name: 'deps-formatter', defaults: {
+    rules: {
+        format: null,
+        depsObjIsArray: null,
+        blockNameShortcut: null
+    }
+}});
+
+config = Object.assign.apply(null, config);
+
+var rules = config['rules'];
+
+module.exports = fileNames =>
+(
+    fileNames ?
+    createReadableStream(fileNames) :
+    createBemWalkStream()
+)
+.pipe(gCST())
+// rules begin
+.pipe(rules['format'] !== null ? formatRule(rules['format']) : through.obj())
+.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray']) : through.obj())
+.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut']) : through.obj())
+.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray']) : through.obj())
+// rules end
+.pipe(through.obj((entity, _, next) => {
+    // console.log(entity.path);
+    // TODO: verbose
+    next(null, entity);
+}))
+.pipe(vfs.dest('.'));
 
 /**
  * @params {Array} files
@@ -71,34 +104,3 @@ function createBemWalkStream() {
         }))
         .pipe(bemEntityToVinyl());
 }
-
-var config = betterc.sync({name: 'deps-formatter', defaults: {
-    rules: {
-        format: null,
-        depsObjIsArray: null,
-        blockNameShortcut: null
-    }
-}});
-
-config = Object.assign.apply(null, config);
-
-var rules = config['rules'];
-
-module.exports = fileNames =>
-(
-    fileNames ?
-    createReadableStream(fileNames) :
-    createBemWalkStream()
-)
-.pipe(gCST())
-// rules begin
-.pipe(formatRule(rules['format']))
-.pipe(depsObjIsArray(rules['depsObjIsArray']))
-.pipe(blockNameShortcut(rules['blockNameShortcut']))
-// rules end
-.pipe(through.obj((entity, _, next) => {
-    // console.log(entity.path);
-    // TODO: verbose
-    next(null, entity);
-}))
-.pipe(vfs.dest('.'));
