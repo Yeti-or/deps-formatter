@@ -49,7 +49,9 @@ All rules for formatting are described in .deps-formatterrc config file
 ```sh
 cat .deps-formatterrc
 {
-    "format": "arrayexpression"
+    "rules": {
+        "format": "arrayexpression"
+    }
 }
 ```
 
@@ -61,15 +63,13 @@ Response for root format of deps.js file, could be different for one and many de
 
 Values:
 
-* "expression" [default] - `({...})` or `[{...}, {...}]`
+* "expression"  - `({...})` or `[{...}, {...}]`
 
 * "arrayExpression" - `[{...}]` or `[{...}, {...}]`
 
 * "objectExpression" - `({...})` or `([{...}, {...}])`
 
 * "commonJS" - `module.exports = {...}` or `module.exports = [...]`
-
-* "any" - whatever you want format
 
 ### depsObjIsArray
 
@@ -78,11 +78,11 @@ Works for value that could be recorded as arrays with one value.
 
 Values:
 
-* false [default] - `mustDeps: [{...}] -> mustDeps: {...}`
+* false - `mustDeps: [{...}] -> mustDeps: {...}`
 
-* true            - `mustDeps: {...} -> mustDeps: [{...}]`
+* true  - `mustDeps: {...} -> mustDeps: [{...}]`
 
-* "any"           - whatever you want
+* "any" - whatever you want
 
 ### blockNameShortcut
 
@@ -90,8 +90,8 @@ Response for allowing {block: 'name'} -> 'name' shortcut
 
 Values:
 
-* false [default] - `mustDeps: {block: 'name'} -> mustDeps: 'name'`
+* false - `mustDeps: {block: 'name'} -> mustDeps: 'name'`
 
-* true            - `mustDeps: 'name' -> mustDeps: {block: 'name'}`
+* true  - `mustDeps: 'name' -> mustDeps: {block: 'name'}`
 
-* "any"           - whatever you want
+* "any" - whatever you want

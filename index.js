@@ -14,6 +14,39 @@ var bemEntityToVinyl = require('bem-files-to-vinyl-fs');
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
+var elemsIsArray = require('./lib/rules/elemsIsArray.js');
+
+var config = betterc.sync({name: 'deps-formatter', defaults: {
+    rules: {
+        format: null,
+        depsObjIsArray: null,
+        blockNameShortcut: null
+    }
+}});
+
+config = Object.assign.apply(null, config);
+
+var rules = config['rules'];
+
+module.exports = fileNames =>
+(
+    fileNames ?
+    createReadableStream(fileNames) :
+    createBemWalkStream()
+)
+.pipe(gCST())
+// rules begin
+.pipe(rules['format'] !== null ? formatRule(rules['format']) : through.obj())
+.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray']) : through.obj())
+.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut']) : through.obj())
+.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray']) : through.obj())
+// rules end
+.pipe(through.obj((entity, _, next) => {
+    // console.log(entity.path);
+    // TODO: verbose
+    next(null, entity);
+}))
+.pipe(vfs.dest('.'));
 
 /**
  * @params {Array} files
@@ -36,6 +69,10 @@ function createReadableStream(files) {
 function createBemWalkStream() {
     var conf = bemConfig.levelMapSync();
     var levels = Object.keys(conf);
+    if (config['levels']) {
+        // get levels from .deps-formaterrc
+        levels = Object.keys(config['levels']);
+    }
     if (!levels.length) {
         console.warn('No levels! Add .bemrc with levels');
         console.warn('Try to use default levels : common.blocks, ...');
@@ -52,42 +89,18 @@ function createBemWalkStream() {
     console.log('Levels to find deps: ');
     console.log(levels);
 
+    var subLevelsMasks = config['subLevelsMasks'];
+    if (subLevelsMasks) {
+        console.log('And subLevels masks: ');
+        Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
+    }
+
     return bemWalk(levels)
-        .pipe(bb8({
-            'examples': '*blocks',
-            'tests': '*blocks',
-            'tmpl-specs': '*blocks'
-        }))
+        // extend bem-walker
+        .pipe(subLevelsMasks ? bb8(subLevelsMasks) : through.obj())
+        // filter deps.js
         .pipe(through.obj(function(entity, _, next) {
-            // filter deps.js
             next(null, entity.tech === 'deps.js' ? entity : null);
         }))
         .pipe(bemEntityToVinyl());
 }
-
-var config = betterc.sync({name: 'deps-formatter', defaults: {
-    format: 'commonjs',
-    depsObjIsArray: false,
-    blockNameShortcut: false
-}});
-
-config = Object.assign.apply(null, config);
-
-module.exports = fileNames =>
-(
-    fileNames ?
-    createReadableStream(fileNames) :
-    createBemWalkStream()
-)
-.pipe(gCST())
-// rules begin
-.pipe(formatRule(config['format']))
-.pipe(depsObjIsArray(config['depsObjIsArray']))
-.pipe(blockNameShortcut(config['blockNameShortcut']))
-// rules end
-.pipe(through.obj((entity, _, next) => {
-    // console.log(entity.path);
-    // TODO: verbose
-    next(null, entity);
-}))
-.pipe(vfs.dest('.'));
