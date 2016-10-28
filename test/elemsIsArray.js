@@ -34,7 +34,7 @@ describe('elemsIsArray rule', () => {
                 var transformedDepFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: [{elem: ['html']}]}
+                    mustDeps: {block: 'i-bem', elems: [{elem: 'html'}]}
                 });`;
 
                 assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
@@ -66,7 +66,7 @@ describe('elemsIsArray rule', () => {
                 var transformedDepFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: [{elem: ['html']}]}
+                    mustDeps: {block: 'i-bem', elems: [{elem: 'html'}]}
                 });`;
 
                 assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
@@ -82,7 +82,7 @@ describe('elemsIsArray rule', () => {
                 var transformedDepFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: [{elem: ['html']}, {elem: ['dom']}]}
+                    mustDeps: {block: 'i-bem', elems: [{elem: 'html'}, {elem: 'dom'}]}
                 });`;
 
                 assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
@@ -144,7 +144,7 @@ describe('elemsIsArray rule', () => {
                 var depFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: [{elem: ['html']}]}
+                    mustDeps: {block: 'i-bem', elems: [{elem: 'html'}]}
                 });`;
 
                 var transformedDepFile =
@@ -160,7 +160,7 @@ describe('elemsIsArray rule', () => {
                 var depFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: [{elem: ['html']}, {elem: ['dom']}]}
+                    mustDeps: {block: 'i-bem', elems: [{elem: 'html'}, {elem: 'dom'}]}
                 });`;
 
                 var transformedDepFile =
@@ -200,13 +200,13 @@ describe('elemsIsArray rule', () => {
                 var depFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: ['html']}
+                    mustDeps: {block: 'i-bem', elem: ['html']}
                 });`;
 
                 var transformedDepFile =
                 `
                 ({
-                    mustDeps: {block: 'i-bem', elems: ['html']}
+                    mustDeps: {block: 'i-bem', elem: ['html']}
                 });`;
 
                 assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
