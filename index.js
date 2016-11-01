@@ -47,11 +47,15 @@ return fileNames =>
     createBemWalkStream()
 )
 .pipe(gCST())
+.pipe(through.obj((file, _, next) => {
+    file.errors = [];
+    next(null, file);
+}))
 // rules begin
-.pipe(rules['format'] !== null ? formatRule(rules['format']) : through.obj())
-.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray']) : through.obj())
+.pipe(rules['format'] !== null ? formatRule(rules['format'], lint) : through.obj())
+.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray'], lint) : through.obj())
 .pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut'], lint) : through.obj())
-.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray']) : through.obj())
+.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray'], lint) : through.obj())
 // rules end
 .pipe(through.obj((entity, _, next) => {
     // console.log(entity.path);
@@ -60,11 +64,7 @@ return fileNames =>
 }))
 .pipe(lint ? through.obj() : vfs.dest('.'))
 .pipe(processErrors(hasErrors))
-.on('end', function() {
-    if (hasErrors) {
-        process.exit(2);
-    }
-})
+.on('end', () => hasErrors && process.exit(2))
 .pipe(devnull);
 
 };
@@ -76,14 +76,11 @@ return fileNames =>
  */
 function processErrors() {
     return through.obj((file, _, next) => {
-        var errors = file.errors;
-        if (errors) {
-            if (errors.length) {
-                console.log('\n' + file.path + ':');
-                errors.forEach(err => console.log('\t' + err));
-                console.log();
-                hasErrors = true;
-            }
+        if (file.errors.length) {
+            console.log('\n' + file.path + ':');
+            file.errors.forEach(err => console.log('\t' + err));
+            console.log();
+            hasErrors = true;
         }
         next(null, file);
     });
