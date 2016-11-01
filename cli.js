@@ -22,15 +22,15 @@ module.exports = coa.Cmd()
         .end()
 
     .opt()
-        .name('lint').title('Lint')
+        .name('lint').title('Lint only don\'t fix')
         .short('l').long('lint')
         .flag()
         .def(false)
         .end()
     .arg()
         .arr()
-        .name('targets')
+        .name('files').title('any-file.deps.js another.deps.js')
         .end()
     .act(function(opts, args) {
-        formatter(opts)(args.targets);
+        formatter(opts)(args.files);
     });
