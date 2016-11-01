@@ -79,8 +79,8 @@ function processErrors() {
         var errors = file.errors;
         if (errors) {
             if (errors.length) {
-                console.log('\n'+file.path+':');
-                errors.forEach(err => console.log('\t'+err));
+                console.log('\n' + file.path + ':');
+                errors.forEach(err => console.log('\t' + err));
                 console.log();
                 hasErrors = true;
             }
