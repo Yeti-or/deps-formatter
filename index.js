@@ -11,6 +11,8 @@ var Vinyl = require('vinyl');
 
 var bemEntityToVinyl = require('bem-files-to-vinyl-fs');
 
+var devnull = require('./lib/devnull.js');
+
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
@@ -24,16 +26,19 @@ var config = betterc.sync({name: 'deps-formatter', defaults: {
         elemsIsArray: null
     }
 }});
-
 config = Object.assign.apply(null, config);
 
 var rules = config['rules'];
-
-var errors = [];
+var hasErrors = false;
 
 module.exports = function(opts) {
-
 var lint = opts.lint;
+
+process.on('exit', code => {
+    // console.log(`About to exit with code: ${code}`);
+    // I don't understand why de f* it works like this?
+    code && process.exit(2);
+});
 
 return fileNames =>
 (
@@ -45,7 +50,7 @@ return fileNames =>
 // rules begin
 .pipe(rules['format'] !== null ? formatRule(rules['format']) : through.obj())
 .pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray']) : through.obj())
-.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut'], lint, errors) : through.obj())
+.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut'], lint) : through.obj())
 .pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray']) : through.obj())
 // rules end
 .pipe(through.obj((entity, _, next) => {
@@ -53,38 +58,36 @@ return fileNames =>
     // TODO: verbose
     next(null, entity);
 }))
+.pipe(lint ? through.obj() : vfs.dest('.'))
+.pipe(processErrors(hasErrors))
 .on('end', function() {
-    console.log('%_%');
+    if (hasErrors) {
+        process.exit(2);
+    }
 })
-.pipe(lint ? processErrors() : vfs.dest('.'))
-.on('end', function() {
-    console.log('%_%');
-})
-.on('end', function() {
-    debugger;
-})
-.pipe(require('./lib/devnull'));
+.pipe(devnull);
 
+};
+
+/**
+ * Find errors in files an show them to user
+ *
+ * @returns {Stream}
+ */
 function processErrors() {
-    var stream = through.obj((file, _, next) => {
+    return through.obj((file, _, next) => {
         var errors = file.errors;
         if (errors) {
             if (errors.length) {
                 console.log('\n'+file.path+':');
                 errors.forEach(err => console.log('\t'+err));
                 console.log();
+                hasErrors = true;
             }
         }
         next(null, file);
     });
-    //stream.on('end', () => {
-    //    debugger
-    //    console.log('END');
-    //});
-    return stream;
 }
-
-};
 
 /**
  * @params {Array} files
