@@ -21,10 +21,16 @@ module.exports = coa.Cmd()
         })
         .end()
 
+    .opt()
+        .name('lint').title('Lint')
+        .short('l').long('lint')
+        .flag()
+        .def(false)
+        .end()
     .arg()
         .arr()
         .name('targets')
         .end()
     .act(function(opts, args) {
-        formatter(args.targets);
+        formatter(opts)(args.targets);
     });
