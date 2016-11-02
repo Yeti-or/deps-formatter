@@ -77,7 +77,7 @@ return fileNames =>
 function processErrors() {
     return through.obj((file, _, next) => {
         if (file.errors.length) {
-            console.log('\n' + file.path + ':');
+            console.log('\n\x1b[36m' + file.path + ':\x1b[0m');
             file.errors.forEach(err => console.log('\t' + err));
             console.log();
             hasErrors = true;
