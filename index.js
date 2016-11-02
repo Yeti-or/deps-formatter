@@ -11,6 +11,8 @@ var Vinyl = require('vinyl');
 
 var bemEntityToVinyl = require('bem-files-to-vinyl-fs');
 
+var devnull = require('./lib/devnull.js');
+
 var formatRule = require('./lib/rules/format.js');
 var depsObjIsArray = require('./lib/rules/depsObjIsArray.js');
 var blockNameShortcut = require('./lib/rules/blockNameShortcut.js');
@@ -20,33 +22,69 @@ var config = betterc.sync({name: 'deps-formatter', defaults: {
     rules: {
         format: null,
         depsObjIsArray: null,
-        blockNameShortcut: null
+        blockNameShortcut: null,
+        elemsIsArray: null
     }
 }});
-
 config = Object.assign.apply(null, config);
 
 var rules = config['rules'];
+var hasErrors = false;
 
-module.exports = fileNames =>
+module.exports = function(opts) {
+var lint = opts.lint;
+
+process.on('exit', code => {
+    // console.log(`About to exit with code: ${code}`);
+    // I don't understand why de f* it works like this?
+    code && process.exit(2);
+});
+
+return fileNames =>
 (
     fileNames ?
     createReadableStream(fileNames) :
     createBemWalkStream()
 )
 .pipe(gCST())
+.pipe(through.obj((file, _, next) => {
+    file.errors = [];
+    next(null, file);
+}))
 // rules begin
-.pipe(rules['format'] !== null ? formatRule(rules['format']) : through.obj())
-.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray']) : through.obj())
-.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut']) : through.obj())
-.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray']) : through.obj())
+.pipe(rules['format'] !== null ? formatRule(rules['format'], lint) : through.obj())
+.pipe(rules['depsObjIsArray'] !== null ? depsObjIsArray(rules['depsObjIsArray'], lint) : through.obj())
+.pipe(rules['blockNameShortcut'] !== null ? blockNameShortcut(rules['blockNameShortcut'], lint) : through.obj())
+.pipe(rules['elemsIsArray'] !== null ? elemsIsArray(rules['elemsIsArray'], lint) : through.obj())
 // rules end
 .pipe(through.obj((entity, _, next) => {
     // console.log(entity.path);
     // TODO: verbose
     next(null, entity);
 }))
-.pipe(vfs.dest('.'));
+.pipe(lint ? through.obj() : vfs.dest('.'))
+.pipe(processErrors(hasErrors))
+.on('end', () => hasErrors && process.exit(2))
+.pipe(devnull);
+
+};
+
+/**
+ * Find errors in files an show them to user
+ *
+ * @returns {Stream}
+ */
+function processErrors() {
+    return through.obj((file, _, next) => {
+        if (file.errors.length) {
+            console.log('\n\x1b[36m' + file.path + ':\x1b[0m');
+            file.errors.forEach(err => console.log('\t' + err));
+            console.log();
+            hasErrors = true;
+        }
+        next(null, file);
+    });
+}
 
 /**
  * @params {Array} files
@@ -60,6 +98,7 @@ function createReadableStream(files) {
             contents: fs.readFileSync(file)
         })
     ));
+    stream.push(null);
     return stream;
 }
 

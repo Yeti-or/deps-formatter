@@ -88,6 +88,21 @@ describe('elemsIsArray rule', () => {
                 assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
             });
 
+            it('deps is array', () => {
+                var depFile =
+                `
+                ({
+                    mustDeps: [{block: 'i-bem', elems: 'html'}]
+                });`;
+
+                var transformedDepFile =
+                `
+                ({
+                    mustDeps: [{block: 'i-bem', elems: ['html']}]
+                });`;
+
+                assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
+            });
         });
 
         describe('value: false', () => {
@@ -172,6 +187,21 @@ describe('elemsIsArray rule', () => {
                 assertRule(rule({elemsIsArray: false}), depFile, transformedDepFile);
             });
 
+            it('deps is array', () => {
+                var depFile =
+                `
+                ({
+                    mustDeps: [{block: 'i-bem', elems: ['html']}]
+                });`;
+
+                var transformedDepFile =
+                `
+                ({
+                    mustDeps: [{block: 'i-bem', elems: 'html'}]
+                });`;
+
+                assertRule(rule({elemsIsArray: false}), depFile, transformedDepFile);
+            });
         });
 
     });
