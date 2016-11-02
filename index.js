@@ -37,7 +37,7 @@ var lint = opts.lint;
 process.on('exit', code => {
     // console.log(`About to exit with code: ${code}`);
     // I don't understand why de f* it works like this?
-    code && process.exit(2);
+    code && process.exit(code);
 });
 
 return fileNames =>
