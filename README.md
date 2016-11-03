@@ -95,3 +95,10 @@ Values:
 * true  - `mustDeps: 'name' -> mustDeps: {block: 'name'}`
 
 * "any" - whatever you want
+
+## Reporters:
+
+Different variants of reporter:
+
+* `console` - default
+* `checkstyle`
