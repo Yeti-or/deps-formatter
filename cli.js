@@ -22,6 +22,12 @@ module.exports = coa.Cmd()
         .end()
 
     .opt()
+        .name('reporter').title('Use specific reporter https://github.com/Yeti-or/deps-formatter#Reporters')
+        .short('r').long('reporter')
+        .def('console')
+        .end()
+
+    .opt()
         .name('lint').title('Lint only don\'t fix')
         .short('l').long('lint')
         .flag()
