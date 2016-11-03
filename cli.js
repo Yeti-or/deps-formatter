@@ -22,7 +22,7 @@ module.exports = coa.Cmd()
         .end()
 
     .opt()
-        .name('reporter').title('Use specific reporter https://github.com/Yeti-or/deps-formatter#Reporters')
+        .name('reporter').title('Use specific reporter https://github.com/Yeti-or/deps-formatter#reporters')
         .short('r').long('reporter')
         .def('console')
         .end()
