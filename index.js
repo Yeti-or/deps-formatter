@@ -114,7 +114,7 @@ function createBemWalkStream() {
     }
     if (!levels.length) {
         console.warn('No levels! Add .bemrc with levels');
-        console.warn('Try to use default levels : common.blocks, ...');
+        // console.warn('Try to use default levels : common.blocks, ...');
         levels = [
             'common.blocks',
             'desktop.blocks',
@@ -125,13 +125,13 @@ function createBemWalkStream() {
         ];
     }
 
-    console.log('Levels to find deps: ');
-    console.log(levels);
+    // console.log('Levels to find deps: ');
+    // console.log(levels);
 
     var subLevelsMasks = config['subLevelsMasks'];
     if (subLevelsMasks) {
-        console.log('And subLevels masks: ');
-        Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
+        // console.log('And subLevels masks: ');
+        // Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
     }
 
     return bemWalk(levels)
