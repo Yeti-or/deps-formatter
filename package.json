@@ -1,6 +1,6 @@
 {
   "name": "deps-formatter",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "deps auto formatting",
   "main": "index.js",
   "bin": {
