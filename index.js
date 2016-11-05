@@ -129,10 +129,10 @@ function createBemWalkStream() {
     // console.log(levels);
 
     var subLevelsMasks = config['subLevelsMasks'];
-    if (subLevelsMasks) {
-        // console.log('And subLevels masks: ');
-        // Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
-    }
+    // if (subLevelsMasks) {
+    //     // console.log('And subLevels masks: ');
+    //     // Object.keys(subLevelsMasks).forEach(key => console.log(key + ': ', subLevelsMasks[key]));
+    // }
 
     return bemWalk(levels)
         // extend bem-walker
