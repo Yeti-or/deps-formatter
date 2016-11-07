@@ -78,11 +78,18 @@ Works for value that could be recorded as arrays with one value.
 
 Values:
 
-* false - `mustDeps: [{...}] -> mustDeps: {...}`
-
 * true  - `mustDeps: {...} -> mustDeps: [{...}]`
 
-* "any" - whatever you want
+* false - `mustDeps: [{...}] -> mustDeps: {...}`
+
+### elemsIsArray
+
+Response for type of elems or elem value.
+Values:
+
+* true  - `elems: {...} -> elems: [{...}]`
+
+* false - `elems: [{...}] -> elems: {...}`
 
 ### blockNameShortcut
 
@@ -90,11 +97,9 @@ Response for allowing {block: 'name'} -> 'name' shortcut
 
 Values:
 
-* false - `mustDeps: {block: 'name'} -> mustDeps: 'name'`
-
 * true  - `mustDeps: 'name' -> mustDeps: {block: 'name'}`
 
-* "any" - whatever you want
+* false - `mustDeps: {block: 'name'} -> mustDeps: 'name'`
 
 ## Reporters:
 
