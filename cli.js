@@ -39,4 +39,18 @@ module.exports = coa.Cmd()
         .end()
     .act(function(opts, args) {
         formatter(opts)(args.files);
-    });
+    })
+    .end()
+
+    .opt()
+        .name('init').title('init .deps-formatterrc')
+        .long('init')
+        .only()
+        .flag()
+        .act(function() {
+            // output the version to stdout instead of stderr if returned
+            require('./init').initConfig()
+            // coa will run `.toString` on the returned value and send it to stderr
+            return '';
+        })
+        .end();
