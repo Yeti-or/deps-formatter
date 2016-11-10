@@ -49,7 +49,7 @@ module.exports = coa.Cmd()
         .flag()
         .act(function() {
             // output the version to stdout instead of stderr if returned
-            require('./init').initConfig()
+            require('./init').initConfig();
             // coa will run `.toString` on the returned value and send it to stderr
             return '';
         })
