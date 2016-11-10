@@ -5,55 +5,63 @@
 [![Coverage Status](https://img.shields.io/coveralls/Yeti-or/deps-formatter.svg?branch=master&style=flat)](https://coveralls.io/r/Yeti-or/deps-formatter)
 [![Dependency Status](http://img.shields.io/david/yeti-or/deps-formatter.svg?style=flat)](https://david-dm.org/yeti-or/deps-formatter)
 
-Приведение `deps.js` файлов к единообразному виду.
+Formatting `deps.js` files, for maintain consistency.
 
-## Установка
+## Install
 
 ```sh
 npm install --save-dev deps-formatter
 ```
 
-## Подготовка
+## Run
 
-Добавьте в ваш проект файл `.bemrc` с информацией о уровнях ваших блоков.
-Например:
-
-```sh
-$ cat .bemrc
-{
-    root: true,
-    levels: {
-         "common.blocks"      : {},
-         "desktop.blocks"     : {}
-    }
-}
-```
-
-Подробнее о конфигурационном файле можно прочитать в описании [bem-config](https://github.com/bem-sdk/bem-config)
-
-## Запуск
-
-Выполните в корне вашего проекта:
+Run in your bem-project directory:
 ```sh
 deps-formatter
 ```
-или
+
+Or to format only one file:
 
 ```sh
 deps-formatter path/to/file.deps.js
 ```
 
-All rules for formatting are described in .deps-formatterrc config file
-.deps-formatterrc is plain JSON.
+## Config 
 
+Initialization of config file:
+```sh
+deps-formatter --init
+```
+This option will create `.deps-formatterrc` config file.
+
+`.deps-formatterrc` is plain JSON.
+
+Example of config:
 ```sh
 cat .deps-formatterrc
 {
     "rules": {
-        "format": "arrayexpression"
+        "format": "arrayexpression",
+        "depsObjIsArray": true,
+        "elemsIsArray": true,
+        "blockNameShortcut": false
+    },
+    "levels": {
+        "common.blocks": {},
+        "desktop.blocks": {}
     }
 }
 ```
+
+Rules section is described below: [rules](https://github.com/Yeti-or/deps-formatter#rules)
+
+## Levels
+
+Levels section is directories that contain blocks with `deps.js` files.
+
+To learn more about levels traversal check out: [bem-walk](https://github.com/bem-sdk/bem-walk#3-define-file-system-levels)
+
+If you don't provide levels section deps-formatter will try to find [.bemrc](https://github.com/bem-sdk/bem-config)
 
 ## Rules:
 
