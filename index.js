@@ -110,7 +110,7 @@ function createBemWalkStream() {
     var conf = bemConfig.levelMapSync();
     var levels = Object.keys(conf);
     if (config['levels']) {
-        // get levels from .deps-formaterrc
+        // get levels from .deps-formatterrc
         levels = Object.keys(config['levels']);
     }
     if (!levels.length) {
