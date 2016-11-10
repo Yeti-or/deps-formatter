@@ -40,7 +40,7 @@ describe('format rule', () => {
             assertRule(formatRule({format: 'commonjs'}), depFile, transformedDepFile);
         });
 
-        xit('many with format', () => {
+        it('many with format', () => {
             var depFile =
             `([{
                 mustDeps: {block: 'i-bem'}
@@ -246,7 +246,7 @@ describe('format rule', () => {
             assertRules(rules, depFile, depFile);
         });
     });
-    xdescribe('with comment', () => {
+    describe('with comment', () => {
         it('commonJS', () => {
             var depFile =
             `([{
