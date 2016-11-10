@@ -16,6 +16,7 @@
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "assign-deep": "^0.4.5",
     "bb8": "0.0.2",
     "bem-config": "^2.0.1",
     "bem-files-to-vinyl-fs": "^1.0.0",

@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 var bemConfig = require('bem-config')();
+var assign = require('assign-deep');
 var betterc = require('betterc');
 var bemWalk = require('bem-walk');
 var bb8 = require('bb8');
@@ -28,7 +29,7 @@ var config = betterc.sync({name: 'deps-formatter', defaults: {
         elemsIsArray: null
     }
 }});
-config = Object.assign.apply(null, config);
+config = assign.apply(null, config);
 
 var rules = config['rules'];
 
