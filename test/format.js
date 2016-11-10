@@ -246,7 +246,7 @@ describe('format rule', () => {
             assertRules(rules, depFile, depFile);
         });
     });
-    xdescribe('with comment', () => {
+    describe('with comment', () => {
         it('commonJS', () => {
             var depFile =
             `([{
