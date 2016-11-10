@@ -80,7 +80,7 @@ return fileNames =>
  */
 function checkForErrors() {
     return through.obj(function(file, _, next) {
-        if (file.errors.length) {
+        if (file.errors && file.errors.length) {
             this.__hasErrors = true;
         }
         next(null, file);
@@ -114,16 +114,19 @@ function createBemWalkStream() {
         levels = Object.keys(config['levels']);
     }
     if (!levels.length) {
-        console.warn('No levels! Add .bemrc with levels');
+        console.warn('No levels! Add .deps-formatterrc with levels');
         // console.warn('Try to use default levels : common.blocks, ...');
-        levels = [
-            'common.blocks',
-            'desktop.blocks',
-            'deskpad.blocks',
-            'touch.blocks',
-            'touch-phone.blocks',
-            'touch-pad.blocks'
-        ];
+        // levels = [
+        //     'common.blocks',
+        //     'desktop.blocks',
+        //     'deskpad.blocks',
+        //     'touch.blocks',
+        //     'touch-phone.blocks',
+        //     'touch-pad.blocks'
+        // ];
+        var stream = through.obj();
+        stream.push(null);
+        return stream;
     }
 
     // console.log('Levels to find deps: ');
