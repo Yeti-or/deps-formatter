@@ -279,6 +279,31 @@ describe('elemsIsArray rule', () => {
             });
 
         });
+
+    });
+
+    describe('elem with mod shouldn\'t transform', () => {
+
+        describe('value: true', () => {
+
+            it('str', () => {
+                var depFile =
+                `
+                ({
+                    mustDeps: {block: 'menu', elem: 'item', mods: {type: 'account'}}
+                });`;
+
+                var transformedDepFile =
+                `
+                ({
+                    mustDeps: {block: 'menu', elem: 'item', mods: {type: 'account'}}
+                });`;
+
+                assertRule(rule({elemsIsArray: true}), depFile, transformedDepFile);
+            });
+
+        });
+
     });
 
 });
