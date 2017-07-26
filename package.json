@@ -2,6 +2,10 @@
   "name": "deps-formatter",
   "version": "0.5.2",
   "description": "deps auto formatting",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Yeti-or/deps-formatter.git"
+  },
   "main": "index.js",
   "bin": {
     "deps-formatter": "bin/deps-formatter"
