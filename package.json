@@ -2,6 +2,10 @@
   "name": "deps-formatter",
   "version": "0.5.2",
   "description": "deps auto formatting",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Yeti-or/deps-formatter.git"
+  },
   "main": "index.js",
   "bin": {
     "deps-formatter": "bin/deps-formatter"
@@ -17,10 +21,10 @@
   "license": "MIT",
   "dependencies": {
     "assign-deep": "^0.4.5",
-    "bb8": "0.0.2",
     "bem-config": "^3.1.0",
     "bem-files-to-vinyl-fs": "^1.0.0",
     "bem-walk": "^1.0.0-1",
+    "bem-walk-nested": "0.0.3",
     "betterc": "^1.1.0",
     "chalk": "^1.1.3",
     "coa": "^1.0.1",
