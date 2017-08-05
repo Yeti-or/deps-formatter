@@ -37,7 +37,7 @@
     "warnie": "^0.1.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.1",
     "jscs": "^3.0.7",
     "jshint": "^2.9.4",
     "mocha": "^3.1.2",
