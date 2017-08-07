@@ -26,7 +26,7 @@
     "bem-walk": "^1.0.0-1",
     "bem-walk-nested": "0.0.3",
     "betterc": "^1.1.0",
-    "chalk": "^1.1.3",
+    "chalk": "^2.1.0",
     "coa": "^1.0.1",
     "cst": "^0.4.6",
     "cst-helpers": "0.1.0",
