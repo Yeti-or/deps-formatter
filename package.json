@@ -20,7 +20,7 @@
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "assign-deep": "^0.4.5",
+    "assign-deep": "^1.0.0",
     "bem-config": "^3.1.0",
     "bem-files-to-vinyl-fs": "^1.0.0",
     "bem-walk": "^1.0.0-1",
